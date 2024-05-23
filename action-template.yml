@@ -5,7 +5,7 @@ inputs:
     description: 'Entry point for npm package'
     required: false
     default: 'src/index.ts'
-  target:
+  platform:
     description: 'Target platform for npm package'
     required: false
     default: 'node'

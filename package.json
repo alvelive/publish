@@ -1,15 +1,15 @@
 {
   "name": "@alvelive/publish",
-  "version": "1.2.0",
+  "version": "1",
   "description": "This is a mock package to test this action.",
   "keywords": [],
-  "homepage": "https://github.com/alvelive/discord#readme",
+  "homepage": "https://github.com/alvelive/publish#readme",
   "bugs": {
-    "url": "https://github.com/alvelive/discord/issues"
+    "url": "https://github.com/alvelive/publish/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/alvelive/discord.git"
+    "url": "git+https://github.com/alvelive/publish.git"
   },
   "license": "ISC",
   "author": "alvelive",

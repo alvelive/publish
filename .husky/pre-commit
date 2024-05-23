@@ -1,1 +1,3 @@
-yarn lint-staged
+#!/bin/bash
+bun lint
+bun script release
