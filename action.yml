@@ -34,6 +34,7 @@ runs:
         NPM_TOKEN: ${{ inputs.npm-token }}
         PUBLISH: ${{ inputs.publish }}
         REGISTRY_URL: ${{ inputs.registry-url }}
+      shell: bash
       run: |
         #!/bin/bash
 
@@ -79,6 +80,7 @@ runs:
 
     - name: Get bun cache dir
       id: bun-cache-dir
+      shell: bash
       run: |
         echo "bun-cache-dir=$(bun pm cache)" >> $GITHUB_ENV
 
@@ -89,10 +91,15 @@ runs:
         key: ${{ runner.os }}-bun-cache
 
     - name: Download build scripts
+      shell: bash
       run: |
-        wget https://raw.githubusercontent.com/alvelive/publish/8804d842c814b8eb279b1030a5501b38b243466b/build.sh https://raw.githubusercontent.com/alvelive/publish/8804d842c814b8eb279b1030a5501b38b243466b/Makefile https://raw.githubusercontent.com/alvelive/publish/8804d842c814b8eb279b1030a5501b38b243466b/dts-bundle.config.json
+        wget \
+          https://raw.githubusercontent.com/alvelive/publish/874e8cf8cf34450aa2232dd1f8fd92af7f12d6f1/build.sh \
+          https://raw.githubusercontent.com/alvelive/publish/874e8cf8cf34450aa2232dd1f8fd92af7f12d6f1/Makefile \
+          https://raw.githubusercontent.com/alvelive/publish/874e8cf8cf34450aa2232dd1f8fd92af7f12d6f1/dts-bundle.config.json
 
     - name: Run build script
+      shell: bash
       run: |
         chmod +x build.sh
         ./build.sh
@@ -100,8 +107,10 @@ runs:
         PLATFORM: ${{ inputs.platform }}
         ENTRY_POINT: ${{ inputs.entrypoint }}
 
-    - if: ${{ inputs.publish }}
+    - name: Publish to npm or GitHub Packages
+      if: ${{ inputs.publish }}
       env:
         NODE_AUTH_TOKEN: ${{ inputs.npm-token }}
+      shell: bash
       run: |
         npm publish
