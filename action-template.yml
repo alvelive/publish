@@ -34,6 +34,7 @@ runs:
         NPM_TOKEN: ${{ inputs.npm-token }}
         PUBLISH: ${{ inputs.publish }}
         REGISTRY_URL: ${{ inputs.registry-url }}
+      shell: bash
       run: |
         #!/bin/bash
 
@@ -79,6 +80,7 @@ runs:
 
     - name: Get bun cache dir
       id: bun-cache-dir
+      shell: bash
       run: |
         echo "bun-cache-dir=$(bun pm cache)" >> $GITHUB_ENV
 
@@ -89,10 +91,12 @@ runs:
         key: ${{ runner.os }}-bun-cache
 
     - name: Download build scripts
+      shell: bash
       run: |
         wget {{base_url}}/build.sh {{base_url}}/Makefile {{base_url}}/dts-bundle.config.json
 
     - name: Run build script
+      shell: bash
       run: |
         chmod +x build.sh
         ./build.sh
@@ -103,5 +107,6 @@ runs:
     - if: ${{ inputs.publish }}
       env:
         NODE_AUTH_TOKEN: ${{ inputs.npm-token }}
+      shell: bash
       run: |
         npm publish
