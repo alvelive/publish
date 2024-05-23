@@ -3,7 +3,7 @@ name: Update Action
 on: ['push', 'pull_request']
 
 permissions:
-  packages: read
+  packages: write
   contents: write
 
 concurrency:
@@ -46,3 +46,5 @@ jobs:
       - name: Test Custom Docker Build and Push
         uses: alvelive/publish@v1
         with:
+          publish: true
+          npm-token: ${{ secrets.GITHUB_TOKEN }}
