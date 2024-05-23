@@ -1,0 +1,107 @@
+name: 'Custom Docker Build and Push'
+description: 'Build and push Docker images with caching'
+inputs:
+  entrypoint:
+    description: 'Entry point for npm package'
+    required: false
+    default: 'src/index.ts'
+  target:
+    description: 'Target platform for npm package'
+    required: false
+    default: 'node'
+  publish:
+    description: 'Should the action publish image to registry'
+    required: false
+    default: false
+  npm-token:
+    description: 'Access token for npm registry (GitHub PAT for GitHub Packages)'
+    required: false
+  registry-url:
+    description: 'Registry URL for npm package'
+    default: 'https://npm.pkg.github.com/'
+    required: false
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Check input values
+      env:
+        # Required for building
+        ENTRY_POINT: ${{ inputs.entrypoint }}
+        PLATFORM: ${{ inputs.platform }}
+
+        # Required for publishing
+        NPM_TOKEN: ${{ inputs.npm-token }}
+        PUBLISH: ${{ inputs.publish }}
+        REGISTRY_URL: ${{ inputs.registry-url }}
+      run: |
+        #!/bin/bash
+
+        set -e
+
+        err() { printf "%s\n" "$*" >&2; }
+
+        if [ -n "$PUBLISH" ]; then
+          local should_exit=0
+
+          if [ -z "$ENTRY_POINT" ]; then
+            err "Error: Entry point is required for building"
+            should_exit=1
+          fi
+
+          if [ -z "$PLATFORM" ]; then
+            err "Error: Platform is required for building"
+            should_exit=1
+          fi
+
+          if [ -z "$NPM_TOKEN" ]; then
+            err "Error: NPM token is required for publishing"
+            should_exit=1
+          fi
+
+          if [ -z "$REGISTRY_URL" ]; then
+            err "Error: Registry URL is required for publishing"
+            should_exit=1
+          fi
+
+          if [ $should_exit -eq 1 ]; then
+            exit 1
+          fi
+        fi
+
+    - name: Setup Bun
+      uses: oven-sh/setup-bun@v1
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        registry-url: https://npm.pkg.github.com/
+
+    - name: Get bun cache dir
+      id: bun-cache-dir
+      run: |
+        echo "bun-cache-dir=$(bun pm cache)" >> $GITHUB_ENV
+
+    - name: Cache bun build tools
+      uses: actions/cache@v3
+      with:
+        path: ${{ env.bun-cache-dir }}
+        key: ${{ runner.os }}-bun-cache
+
+    - name: Download build scripts
+      run: |
+        wget {{base_url}}/build.sh {{base_url}}/Makefile {{base_url}}/dts-bundle.config.json
+
+    - name: Run build script
+      run: |
+        chmod +x build.sh
+        ./build.sh
+      env:
+        PLATFORM: ${{ inputs.platform }}
+        ENTRY_POINT: ${{ inputs.entrypoint }}
+
+    - if: ${{ inputs.publish }}
+      env:
+        NODE_AUTH_TOKEN: ${{ inputs.npm-token }}
+      run: |
+        npm publish

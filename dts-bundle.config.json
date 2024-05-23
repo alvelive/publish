@@ -1,0 +1,28 @@
+{
+  "compilationOptions": {
+    "followSymlinks": true,
+    "preferredConfigPath": "./tsconfig.json"
+  },
+  "entries": [
+    {
+      "failOnClass": false,
+      "filePath": "./src/index.ts",
+      "libraries": {
+        "allowedTypesLibraries": [],
+        "importedLibraries": [],
+        "inlinedLibraries": ["*"]
+      },
+      "noCheck": true,
+      "outFile": "./dist/types/index.d.ts",
+      "output": {
+        "exportReferencedTypes": false,
+        "inlineDeclareExternals": false,
+        "inlineDeclareGlobals": false,
+        "noBanner": true,
+        "respectPreserveConstEnum": false,
+        "sortNodes": true,
+        "umdModuleName": "AlveLive"
+      }
+    }
+  ]
+}
