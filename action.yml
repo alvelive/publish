@@ -5,7 +5,7 @@ inputs:
     description: 'Entry point for npm package'
     required: false
     default: 'src/index.ts'
-  target:
+  platform:
     description: 'Target platform for npm package'
     required: false
     default: 'node'
@@ -94,9 +94,9 @@ runs:
       shell: bash
       run: |
         wget \
-          https://raw.githubusercontent.com/alvelive/publish/1c506e66749364c296ac8edc7b0ddded4b50af8f/build.sh \
-          https://raw.githubusercontent.com/alvelive/publish/1c506e66749364c296ac8edc7b0ddded4b50af8f/Makefile \
-          https://raw.githubusercontent.com/alvelive/publish/1c506e66749364c296ac8edc7b0ddded4b50af8f/dts-bundle.config.json
+          https://raw.githubusercontent.com/alvelive/publish/36797666063ea6c205d9627fd8814821cd8e61f7/build.sh \
+          https://raw.githubusercontent.com/alvelive/publish/36797666063ea6c205d9627fd8814821cd8e61f7/Makefile \
+          https://raw.githubusercontent.com/alvelive/publish/36797666063ea6c205d9627fd8814821cd8e61f7/dts-bundle.config.json
 
     - name: Run build script
       shell: bash
