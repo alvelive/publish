@@ -1,5 +1,5 @@
-name: 'Custom Docker Build and Push'
-description: 'Build and push Docker images with caching'
+name: 'npm publish'
+description: 'This is a simple action to publish npm packages (or GitHub Packages)'
 inputs:
   entrypoint:
     description: 'Entry point for npm package'
@@ -90,7 +90,7 @@ runs:
 
     - name: Download build scripts
       run: |
-        wget https://raw.githubusercontent.com/alvelive/publish/f6201ff031edf1248580803f8be0a4df6fb8974d/build.sh https://raw.githubusercontent.com/alvelive/publish/f6201ff031edf1248580803f8be0a4df6fb8974d/Makefile https://raw.githubusercontent.com/alvelive/publish/f6201ff031edf1248580803f8be0a4df6fb8974d/dts-bundle.config.json
+        wget https://raw.githubusercontent.com/alvelive/publish/8804d842c814b8eb279b1030a5501b38b243466b/build.sh https://raw.githubusercontent.com/alvelive/publish/8804d842c814b8eb279b1030a5501b38b243466b/Makefile https://raw.githubusercontent.com/alvelive/publish/8804d842c814b8eb279b1030a5501b38b243466b/dts-bundle.config.json
 
     - name: Run build script
       run: |
