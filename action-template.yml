@@ -43,7 +43,7 @@ runs:
         err() { printf "%s\n" "$*" >&2; }
 
         if [ -n "$PUBLISH" ]; then
-          local should_exit=0
+          should_exit=0
 
           if [ -z "$ENTRY_POINT" ]; then
             err "Error: Entry point is required for building"
