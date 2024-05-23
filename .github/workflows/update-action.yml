@@ -14,7 +14,7 @@ jobs:
     name: Update action file with new script urls
     runs-on: ubuntu-latest
     env:
-      repo_url: 'https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}'
+      base_url: 'https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/build'
       template_file: 'action-template.yml'
       output_file: 'action.yml'
     steps:
@@ -23,7 +23,7 @@ jobs:
 
       - name: Update Makefile script
         run: |
-          sed "s|{{base_url}}|${{ env.repo_url }}|g" "${{ env.template_file }}" | tee "${{ env.output_file }}"
+          sed "s|{{base_url}}|${{ env.base_url }}|g" "${{ env.template_file }}" | tee "${{ env.output_file }}"
 
       - name: Commit and push action.yml
         run: |
