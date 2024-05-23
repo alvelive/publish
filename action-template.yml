@@ -93,7 +93,10 @@ runs:
     - name: Download build scripts
       shell: bash
       run: |
-        wget {{base_url}}/build.sh {{base_url}}/Makefile {{base_url}}/dts-bundle.config.json
+        wget \
+          {{base_url}}/build.sh \
+          {{base_url}}/Makefile \
+          {{base_url}}/dts-bundle.config.json
 
     - name: Run build script
       shell: bash
@@ -104,7 +107,8 @@ runs:
         PLATFORM: ${{ inputs.platform }}
         ENTRY_POINT: ${{ inputs.entrypoint }}
 
-    - if: ${{ inputs.publish }}
+    - name: Publish to npm or GitHub Packages
+      if: ${{ inputs.publish }}
       env:
         NODE_AUTH_TOKEN: ${{ inputs.npm-token }}
       shell: bash
