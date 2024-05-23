@@ -1,5 +1,5 @@
-name: 'Custom Docker Build and Push'
-description: 'Build and push Docker images with caching'
+name: 'npm publish'
+description: 'This is a simple action to publish npm packages (or GitHub Packages)'
 inputs:
   entrypoint:
     description: 'Entry point for npm package'
