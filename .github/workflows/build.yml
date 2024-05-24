@@ -21,7 +21,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Update Makefile script
+      - name: Update action.yml
         run: |
           sed "s|{{base_url}}|${{ env.base_url }}|g" "${{ env.template_file }}" | tee "${{ env.output_file }}"
 
