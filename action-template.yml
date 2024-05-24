@@ -57,19 +57,19 @@ runs:
 
         err() { printf "%s\n" "$*" >&2; }
 
-        if [ -n "$PUBLISH" ]; then
-          should_exit=0
+        should_exit=0
+        
+        if [ -z "$ENTRY_POINT" ]; then
+          err "Error: Entry point is required for building"
+          should_exit=1
+        fi
 
-          if [ -z "$ENTRY_POINT" ]; then
-            err "Error: Entry point is required for building"
-            should_exit=1
-          fi
+        if [ -z "$PLATFORM" ]; then
+          err "Error: Platform is required for building"
+          should_exit=1
+        fi
 
-          if [ -z "$PLATFORM" ]; then
-            err "Error: Platform is required for building"
-            should_exit=1
-          fi
-
+        if [ "$PUBLISH" == "true" ]; then
           if [ -z "$NPM_TOKEN" ]; then
             err "Error: NPM token is required for publishing"
             should_exit=1
@@ -91,7 +91,7 @@ runs:
     - uses: actions/setup-node@v4
       with:
         node-version: '20.x'
-        registry-url: https://npm.pkg.github.com/
+        registry-url: ${{ inputs.registry-url }}
 
     - name: Get bun cache dir
       id: bun-cache-dir
