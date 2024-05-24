@@ -9,6 +9,17 @@ inputs:
     description: 'Target platform for npm package'
     required: false
     default: 'node'
+  install-scope:
+    description: 'Dependency scope for npm dependencies'
+    required: false
+    default: '@alvelive'
+  install-token:
+    description: 'Access token for npm registry during installation (GitHub PAT for GitHub Packages)'
+    required: false
+  install-registry-url:
+    description: 'Access token for npm registry during installation (GitHub PAT for GitHub Packages)'
+    default: 'https://npm.pkg.github.com/'
+    required: false
   publish:
     description: 'Should the action publish image to registry'
     required: false
@@ -92,17 +103,37 @@ runs:
 
     - name: Download build scripts
       shell: bash
-      run: |
-        wget \
-          https://raw.githubusercontent.com/alvelive/publish/74b5be5e85eca8bef4d7106ef7baac2b9ef336cc/build/build.sh \
-          https://raw.githubusercontent.com/alvelive/publish/74b5be5e85eca8bef4d7106ef7baac2b9ef336cc/build/Makefile \
-          https://raw.githubusercontent.com/alvelive/publish/74b5be5e85eca8bef4d7106ef7baac2b9ef336cc/build/dts-bundle.config.json
+      run: wget https://raw.githubusercontent.com/alvelive/publish/3e4ee6b644a1f61830ed7a278553a77a2c2a189e/Makefile https://raw.githubusercontent.com/alvelive/publish/3e4ee6b644a1f61830ed7a278553a77a2c2a189e/dts-bundle.config.json
 
     - name: Run build script
       shell: bash
       run: |
-        chmod +x build.sh
-        ./build.sh
+        install_scope='${{ inputs.install-scope }}'
+        install_token='${{ inputs.install-token }}'
+        install_registry_url='${{ inputs.install-registry-url }}'
+
+        if [ -n "$install_scope" ]; then
+          echo "Creating bunfig.toml for private scope $install_scope"
+
+          cat <<EOF >bunfig.toml
+          # bunfig.toml
+          [install.scopes]
+          "$install_scope" = { token = "$install_token", url = "$install_registry_url" }
+        EOF
+
+          echo "Creating .npmrc for private scope $install_scope"
+          cat <<EOF >.npmrc
+          $install_scope:registry=$install_registry_url
+          //npm.pkg.github.com/:_authToken=$install_token
+        EOF
+        else
+          echo "No private scope provided for installation"
+        fi
+
+        make all
+
+        echo "Cleaning up node auth tokens for bun and npm"
+        rm -f bunfig.toml .npmrc
       env:
         PLATFORM: ${{ inputs.platform }}
         ENTRY_POINT: ${{ inputs.entrypoint }}

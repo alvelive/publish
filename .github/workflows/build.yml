@@ -1,0 +1,46 @@
+name: Update Action
+
+on:
+  - pull_request
+
+permissions:
+  contents: write
+  packages: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  build:
+    name: Update action file with new script urls
+    runs-on: ubuntu-latest
+    env:
+      base_url: 'https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/'
+      template_file: 'action-template.yml'
+      output_file: 'action.yml'
+    steps:
+      - name: Update action.yml
+        uses: alvelive/update-action@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.head_ref || github.ref_name }}
+          repository: ${{ github.repository }}
+          sha: ${{ github.sha }}
+          match: '{{base_url}}'
+
+  test:
+    name: Test custom npm publish
+    runs-on: ubuntu-latest
+    needs: build
+    env:
+      branch: ${{ github.head_ref || github.ref_name }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Test Custom Docker Build and Push
+        uses: alvelive/publish@v1
+        with:
+          publish: false
+          npm-token: ${{ secrets.GITHUB_TOKEN }}
+          install-token: ${{ secrets.GITHUB_TOKEN }}
