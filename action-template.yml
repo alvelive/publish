@@ -9,6 +9,17 @@ inputs:
     description: 'Target platform for npm package'
     required: false
     default: 'node'
+  install-scope:
+    description: 'Dependency scope for npm dependencies'
+    required: false
+    default: '@alvelive'
+  install-token:
+    description: 'Access token for npm registry during installation (GitHub PAT for GitHub Packages)'
+    required: false
+  install-registry-url:
+    description: 'Access token for npm registry during installation (GitHub PAT for GitHub Packages)'
+    default: 'https://npm.pkg.github.com/'
+    required: false
   publish:
     description: 'Should the action publish image to registry'
     required: false
@@ -94,6 +105,21 @@ runs:
       shell: bash
       run: |
         wget {{base_url}}/Makefile {{base_url}}/dts-bundle.config.json
+        install_scope="${{ inputs.install-scope }}"
+
+        if [ -n "$install_scope" ]; then
+          cat <<EOF >bunfig.toml
+          # bunfig.toml
+          [install.scopes]
+          "${{ inputs.install-scope }}" = { token = "${{ inputs.install-token }}", url = "${{ inputs.install-registry-url }}" }
+        EOF
+
+          cat <<EOF >.npmrc
+          ${{ inputs.install-scope }}:registry=${{ inputs.install-registry-url }}
+          //npm.pkg.github.com/:_authToken=${{ inputs.install-token }}
+        EOF
+        fi
+
         make all
 
     - name: Run build script

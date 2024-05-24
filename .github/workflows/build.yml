@@ -41,5 +41,6 @@ jobs:
       - name: Test Custom Docker Build and Push
         uses: alvelive/publish@v1
         with:
-          publish: true
+          publish: false
           npm-token: ${{ secrets.GITHUB_TOKEN }}
+          install-token: ${{ secrets.GITHUB_TOKEN }}

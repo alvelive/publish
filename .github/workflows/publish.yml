@@ -24,3 +24,4 @@ jobs:
         with:
           publish: true
           npm-token: ${{ secrets.GITHUB_TOKEN }}
+          install-token: ${{ secrets.GITHUB_TOKEN }}
