@@ -18,27 +18,14 @@ jobs:
       template_file: 'action-template.yml'
       output_file: 'action.yml'
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
       - name: Update action.yml
-        run: |
-          sed "s|{{base_url}}|${{ env.base_url }}|g" "${{ env.template_file }}" | tee "${{ env.output_file }}"
-
-      - name: Configure Git
-        run: |
-          git config --global user.name 'GitHub Action'
-          git config --global user.email 'action@github.com'
-
-      - name: Pull latest changes
-        run: |
-          git pull --rebase origin ${{ github.head_ref }}
-
-      - name: Commit and push action.yml
-        run: |
-          git add "${{ env.output_file }}"
-          git commit -m "Update ${{ env.output_file }} to reflect new release"
-          git push origin HEAD:${{ github.head_ref }}
+        uses: alvelive/update-action@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.head_ref || github.ref_name }}
+          repository: ${{ github.repository }}
+          sha: ${{ github.sha }}
+          match: '{{base_url}}'
 
   test:
     name: Test custom npm publish

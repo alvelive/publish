@@ -93,10 +93,8 @@ runs:
     - name: Download build scripts
       shell: bash
       run: |
-        wget \
-          {{base_url}}/build.sh \
-          {{base_url}}/Makefile \
-          {{base_url}}/dts-bundle.config.json
+        wget {{base_url}}/Makefile {{base_url}}/dts-bundle.config.json
+        make all
 
     - name: Run build script
       shell: bash
