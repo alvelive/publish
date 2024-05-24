@@ -25,10 +25,17 @@ jobs:
         run: |
           sed "s|{{base_url}}|${{ env.base_url }}|g" "${{ env.template_file }}" | tee "${{ env.output_file }}"
 
-      - name: Commit and push action.yml
+      - name: Configure Git
         run: |
           git config --global user.name 'GitHub Action'
           git config --global user.email 'action@github.com'
+
+      - name: Pull latest changes
+        run: |
+          git pull origin ${{ github.head_ref }}
+
+      - name: Commit and push action.yml
+        run: |
           git add "${{ env.output_file }}"
           git commit -m "Update ${{ env.output_file }} to reflect new release"
           git push origin HEAD:${{ github.head_ref }}
@@ -46,5 +53,4 @@ jobs:
       - name: Test Custom Docker Build and Push
         uses: alvelive/publish@v1
         with:
-          publish: true
-          npm-token: ${{ secrets.GITHUB_TOKEN }}
+          publish: false
