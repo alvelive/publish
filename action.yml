@@ -94,9 +94,9 @@ runs:
       shell: bash
       run: |
         wget \
-          https://raw.githubusercontent.com/alvelive/publish/5c39df5b05f458e0812589875d3a4c2e7125d795//build.sh \
-          https://raw.githubusercontent.com/alvelive/publish/5c39df5b05f458e0812589875d3a4c2e7125d795//Makefile \
-          https://raw.githubusercontent.com/alvelive/publish/5c39df5b05f458e0812589875d3a4c2e7125d795//dts-bundle.config.json
+          https://raw.githubusercontent.com/alvelive/publish/74b5be5e85eca8bef4d7106ef7baac2b9ef336cc/build/build.sh \
+          https://raw.githubusercontent.com/alvelive/publish/74b5be5e85eca8bef4d7106ef7baac2b9ef336cc/build/Makefile \
+          https://raw.githubusercontent.com/alvelive/publish/74b5be5e85eca8bef4d7106ef7baac2b9ef336cc/build/dts-bundle.config.json
 
     - name: Run build script
       shell: bash
