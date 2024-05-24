@@ -1,0 +1,29 @@
+name: Create a new release
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    if: |
+      startsWith(github.head_ref, 'release-please-') == false
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Increase version and build
+        uses: google-github-actions/release-please-action@v3
+        with:
+          release-type: node
+          package-name: '@${{ github.repository }}'
+          token: ${{ secrets.GITHUB_TOKEN }}

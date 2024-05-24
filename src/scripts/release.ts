@@ -6,13 +6,8 @@ async function main(): Promise<void> {
   const json = await readFile(path, 'utf-8');
   const data = JSON.parse(json);
 
-  data.version = parseFloat(data.version) + 0.1;
-
-  if (isNaN(data.version)) {
-    throw new Error('Invalid version number');
-  }
-
-  data.version = data.version.toFixed(1);
+  data.version = parseInt(String(data.version).replace(/\d./g, '')) + 1;
+  data.version = `1.0.${data.version}`;
 
   await writeFile(path, JSON.stringify(data, null, 2), 'utf-8');
 }

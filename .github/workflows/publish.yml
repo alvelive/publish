@@ -1,0 +1,26 @@
+name: Check if the changes pass the build
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Publish the package
+        uses: alvelive/publish@v1
+        with:
+          publish: true
+          npm-token: ${{ secrets.GITHUB_TOKEN }}
