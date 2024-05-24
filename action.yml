@@ -107,7 +107,7 @@ runs:
 
     - name: Download build scripts
       shell: bash
-      run: wget https://raw.githubusercontent.com/alvelive/publish/53c64a5e246f84a6fa2306ac609a5df15ab01806/Makefile https://raw.githubusercontent.com/alvelive/publish/53c64a5e246f84a6fa2306ac609a5df15ab01806/dts-bundle.config.json
+      run: wget https://raw.githubusercontent.com/alvelive/publish/f2470fe8033b0454388f8595ea09f1a0923f3419/Makefile https://raw.githubusercontent.com/alvelive/publish/f2470fe8033b0454388f8595ea09f1a0923f3419/dts-bundle.config.json
 
     - name: Run build script
       shell: bash
@@ -157,17 +157,14 @@ runs:
         echo "Cleaning up node auth tokens for bun and npm"
         rm -f bunfig.toml .npmrc
 
+    - name: Unpublish the package from registry
+      if: ${{ inputs.publish && inputs.force }}
+      shell: bash
+      run: npm unpublish || exit 0
+
     - name: Publish to npm or GitHub Packages
       if: ${{ inputs.publish }}
       env:
-        FORCE_PUBLISH: '${{ inputs.force }}'
         NODE_AUTH_TOKEN: '${{ inputs.npm-token }}'
       shell: bash
-      run: |
-        if [[ "true" == "$FORCE_PUBLISH" ]]; then
-          echo "Force publishing to registry"
-          npm publish --force
-        else
-          echo "Publishing to registry"
-          npm publish
-        fi
+      run: npm publish
