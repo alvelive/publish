@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.1](https://github.com/alvelive/publish/compare/v1.2.0...v1.2.1) (2024-05-24)
+
+
+### Bug Fixes
+
+* **action-template:** invalid env check ([c978353](https://github.com/alvelive/publish/commit/c978353c2e73254345f75c98a883e91cc2cf90cd))
+
 ## [1.2.0](https://github.com/alvelive/publish/compare/v1.1.0...v1.2.0) (2024-05-24)
 
 
