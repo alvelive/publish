@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.0](https://github.com/alvelive/publish/compare/v1.0.0...v1.1.0) (2024-05-24)
+
+
+### Features
+
+* **action:** added force publish option to prevent conflicts ([5266a4a](https://github.com/alvelive/publish/commit/5266a4a84b1f618a2add267dfada53816bd4fc8b))
+* **readme:** updated readme ([8d51f5b](https://github.com/alvelive/publish/commit/8d51f5ba74d7b991acb01f75978feb1d6a6d0db1))
+
 ## 1.0.0 (2024-05-24)
 
 
