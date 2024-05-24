@@ -93,7 +93,7 @@ runs:
     - name: Download build scripts
       shell: bash
       run: |
-        wget https://raw.githubusercontent.com/alvelive/publish/ec3963c0877c99aba1031aaf0f440ebe59a3e35b/Makefile https://raw.githubusercontent.com/alvelive/publish/ec3963c0877c99aba1031aaf0f440ebe59a3e35b/dts-bundle.config.json
+        wget https://raw.githubusercontent.com/alvelive/publish/a6bb88e59fa4a22b9ca664c4f73fe9aa162d31e0/Makefile https://raw.githubusercontent.com/alvelive/publish/a6bb88e59fa4a22b9ca664c4f73fe9aa162d31e0/dts-bundle.config.json
         make all
 
     - name: Run build script
