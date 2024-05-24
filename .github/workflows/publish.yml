@@ -22,6 +22,7 @@ jobs:
       - name: Publish the package
         uses: alvelive/publish@v1
         with:
+          force: true
           publish: true
           npm-token: ${{ secrets.GITHUB_TOKEN }}
           install-token: ${{ secrets.GITHUB_TOKEN }}

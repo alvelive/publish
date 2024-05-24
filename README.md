@@ -18,6 +18,7 @@ publishing processes.
 | `publish`              | Should the action publish the image to the registry                                | No                 | Yes                  | `false`                                                              |
 | `npm-token`            | Access token for npm registry (GitHub PAT for GitHub Packages)                     | No                 | Yes                  | Required if your package needs private packages during publish       |
 | `registry-url`         | Registry URL for npm package                                                       | No                 | Yes                  | `https://npm.pkg.github.com/`                                        |
+| `force`                | Force publish to registry                                                          | No                 | No                   | false                                                                |
 
 ## Usage
 

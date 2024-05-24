@@ -31,6 +31,10 @@ inputs:
     description: 'Registry URL for npm package'
     default: 'https://npm.pkg.github.com/'
     required: false
+  force:
+    description: 'Force publish to registry'
+    required: false
+    default: false
 
 runs:
   using: 'composite'
@@ -141,7 +145,14 @@ runs:
     - name: Publish to npm or GitHub Packages
       if: ${{ inputs.publish }}
       env:
-        NODE_AUTH_TOKEN: ${{ inputs.npm-token }}
+        FORCE_PUBLISH: '${{ inputs.force }}'
+        NODE_AUTH_TOKEN: '${{ inputs.npm-token }}'
       shell: bash
       run: |
-        npm publish
+        if [[ "true" == "$FORCE_PUBLISH" ]]; then
+          echo "Force publishing to registry"
+          npm publish --force
+        else
+          echo "Publishing to registry"
+          npm publish
+        fi
