@@ -3,7 +3,7 @@ name: Create a new release
 on:
   push:
     branches:
-      - main
+      - v1
 
 permissions:
   contents: write

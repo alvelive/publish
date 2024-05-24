@@ -3,7 +3,7 @@ name: Check if the changes pass the build
 on:
   push:
     branches:
-      - main
+      - v1
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
