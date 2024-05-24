@@ -31,7 +31,7 @@ jobs:
           git config --global user.email 'action@github.com'
           git add "${{ env.output_file }}"
           git commit -m "Update ${{ env.output_file }} to reflect new release"
-          git push
+          git push origin HEAD:${{ github.head_ref }}
 
   test:
     name: Test custom npm publish
