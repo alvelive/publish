@@ -1,0 +1,6 @@
+{
+  "release-type": "node",
+  "changelog-path": "CHANGELOG.md",
+  "draft": false,
+  ".": "1.2.0"
+}
