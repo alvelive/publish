@@ -42,13 +42,13 @@ runs:
     - name: Check input values
       env:
         # Required for building
-        ENTRY_POINT: ${{ inputs.entrypoint }}
-        PLATFORM: ${{ inputs.platform }}
+        ENTRY_POINT: "${{ inputs.entrypoint }}"
+        PLATFORM: "${{ inputs.platform }}"
 
         # Required for publishing
-        NPM_TOKEN: ${{ inputs.npm-token }}
-        PUBLISH: ${{ inputs.publish }}
-        REGISTRY_URL: ${{ inputs.registry-url }}
+        NPM_TOKEN: "${{ inputs.npm-token }}"
+        PUBLISH: "${{ inputs.publish }}"
+        REGISTRY_URL: "${{ inputs.registry-url }}"
       shell: bash
       run: |
         #!/bin/bash
@@ -107,7 +107,7 @@ runs:
 
     - name: Download build scripts
       shell: bash
-      run: wget https://raw.githubusercontent.com/alvelive/publish/f9fb9a85a737107be649f964bc537ac86f7c0f8f/Makefile https://raw.githubusercontent.com/alvelive/publish/f9fb9a85a737107be649f964bc537ac86f7c0f8f/dts-bundle.config.json
+      run: wget https://raw.githubusercontent.com/alvelive/publish/3c13d3111427af4c62688ae88d1d170d9291c749/Makefile https://raw.githubusercontent.com/alvelive/publish/3c13d3111427af4c62688ae88d1d170d9291c749/dts-bundle.config.json
 
     - name: Run build script
       shell: bash
@@ -158,14 +158,14 @@ runs:
         rm -f bunfig.toml .npmrc
 
     - name: Unpublish the package from registry
-      if: ${{ inputs.publish && inputs.force }}
+      if: "${{ inputs.publish == 'true' && inputs.force == 'true' }}"
       shell: bash
       env:
-        NODE_AUTH_TOKEN: ${{ inputs.npm-token }}
+        NODE_AUTH_TOKEN: '${{ inputs.npm-token }}'
       run: npm unpublish || exit 0
 
     - name: Publish to npm or GitHub Packages
-      if: ${{ inputs.publish }}
+      if: "${{ inputs.publish == 'true' }}"
       env:
         NODE_AUTH_TOKEN: '${{ inputs.npm-token }}'
       shell: bash
