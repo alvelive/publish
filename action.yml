@@ -103,30 +103,37 @@ runs:
 
     - name: Download build scripts
       shell: bash
-      run: |
-        wget https://raw.githubusercontent.com/alvelive/publish/f3ee6567d7fe4c6687bec8256477a393a3a3f039/Makefile https://raw.githubusercontent.com/alvelive/publish/f3ee6567d7fe4c6687bec8256477a393a3a3f039/dts-bundle.config.json
-        install_scope="${{ inputs.install-scope }}"
-
-        if [ -n "$install_scope" ]; then
-          cat <<EOF >bunfig.toml
-          # bunfig.toml
-          [install.scopes]
-          "${{ inputs.install-scope }}" = { token = "${{ inputs.install-token }}", url = "${{ inputs.install-registry-url }}" }
-        EOF
-
-          cat <<EOF >.npmrc
-          ${{ inputs.install-scope }}:registry=${{ inputs.install-registry-url }}
-          //npm.pkg.github.com/:_authToken=${{ inputs.install-token }}
-        EOF
-        fi
-
-        make all
+      run: wget https://raw.githubusercontent.com/alvelive/publish/3e4ee6b644a1f61830ed7a278553a77a2c2a189e/Makefile https://raw.githubusercontent.com/alvelive/publish/3e4ee6b644a1f61830ed7a278553a77a2c2a189e/dts-bundle.config.json
 
     - name: Run build script
       shell: bash
       run: |
-        chmod +x build.sh
-        ./build.sh
+        install_scope='${{ inputs.install-scope }}'
+        install_token='${{ inputs.install-token }}'
+        install_registry_url='${{ inputs.install-registry-url }}'
+
+        if [ -n "$install_scope" ]; then
+          echo "Creating bunfig.toml for private scope $install_scope"
+
+          cat <<EOF >bunfig.toml
+          # bunfig.toml
+          [install.scopes]
+          "$install_scope" = { token = "$install_token", url = "$install_registry_url" }
+        EOF
+
+          echo "Creating .npmrc for private scope $install_scope"
+          cat <<EOF >.npmrc
+          $install_scope:registry=$install_registry_url
+          //npm.pkg.github.com/:_authToken=$install_token
+        EOF
+        else
+          echo "No private scope provided for installation"
+        fi
+
+        make all
+
+        echo "Cleaning up node auth tokens for bun and npm"
+        rm -f bunfig.toml .npmrc
       env:
         PLATFORM: ${{ inputs.platform }}
         ENTRY_POINT: ${{ inputs.entrypoint }}
