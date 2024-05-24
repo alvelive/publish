@@ -107,7 +107,7 @@ runs:
 
     - name: Download build scripts
       shell: bash
-      run: wget https://raw.githubusercontent.com/alvelive/publish/cefc12e91f5a6a3b9c97be541623095bfd0cf12f/Makefile https://raw.githubusercontent.com/alvelive/publish/cefc12e91f5a6a3b9c97be541623095bfd0cf12f/dts-bundle.config.json
+      run: wget https://raw.githubusercontent.com/alvelive/publish/456bb0cabb0229d9c96d574d29aacf86e9bbb8d3/Makefile https://raw.githubusercontent.com/alvelive/publish/456bb0cabb0229d9c96d574d29aacf86e9bbb8d3/dts-bundle.config.json
 
     - name: Run build script
       shell: bash
