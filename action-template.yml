@@ -111,10 +111,14 @@ runs:
 
     - name: Run build script
       shell: bash
+      env:
+        install-scope: '${{ inputs.install-scope }}'
+        install-token: '${{ inputs.install-token || inputs.npm-token }}'
+        install-registry-url: '${{ inputs.install-registry-url || inputs.registry-url }}'
       run: |
-        install_scope='${{ inputs.install-scope }}'
-        install_token='${{ inputs.install-token }}'
-        install_registry_url='${{ inputs.install-registry-url }}'
+        install_scope='${{ env.install-scope }}'
+        install_token='${{ env.install-token }}'
+        install_registry_url='${{ env.install-registry-url }}'
 
         if [ -n "$install_scope" ]; then
           echo "Creating bunfig.toml for private scope $install_scope"
