@@ -107,7 +107,7 @@ runs:
 
     - name: Download build scripts
       shell: bash
-      run: wget https://raw.githubusercontent.com/alvelive/publish/f2470fe8033b0454388f8595ea09f1a0923f3419/Makefile https://raw.githubusercontent.com/alvelive/publish/f2470fe8033b0454388f8595ea09f1a0923f3419/dts-bundle.config.json
+      run: wget https://raw.githubusercontent.com/alvelive/publish/456bb0cabb0229d9c96d574d29aacf86e9bbb8d3/Makefile https://raw.githubusercontent.com/alvelive/publish/456bb0cabb0229d9c96d574d29aacf86e9bbb8d3/dts-bundle.config.json
 
     - name: Run build script
       shell: bash
@@ -160,6 +160,8 @@ runs:
     - name: Unpublish the package from registry
       if: ${{ inputs.publish && inputs.force }}
       shell: bash
+      env:
+        NODE_AUTH_TOKEN: ${{ inputs.npm-token }}
       run: npm unpublish || exit 0
 
     - name: Publish to npm or GitHub Packages

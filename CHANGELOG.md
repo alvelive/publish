@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.2.0](https://github.com/alvelive/publish/compare/v1.1.0...v1.2.0) (2024-05-24)
+
+
+### Features
+
+* **action:** updated action to use npm-token input as a fallback for install-token (same as install-registry-url) ([584c501](https://github.com/alvelive/publish/commit/584c501d606c7bb83691f63c8a1f3dc3f28bb4c7))
+
+
+### Bug Fixes
+
+* **action-template:** invalid parse of instal token etc ([03c29a9](https://github.com/alvelive/publish/commit/03c29a97417fee34e60665bf7557882498f559f1))
+* **action-template:** missing env for unpublish step ([47826f6](https://github.com/alvelive/publish/commit/47826f62b04ec087bf2afef06f9010d25bf963d5))
+* **action-template:** npm publish force does not work with github packages ([f2470fe](https://github.com/alvelive/publish/commit/f2470fe8033b0454388f8595ea09f1a0923f3419))
+* **workflow:** fix publish that needs the action to be updated ([6fadf26](https://github.com/alvelive/publish/commit/6fadf2654c78819c4a709f07d76a701b9e4b9577))
+* **workflow:** update permissions for publish action ([59b4219](https://github.com/alvelive/publish/commit/59b4219d88bf0c4c68259ed9996f9c55b05ad8e7))
+
 ## [1.1.0](https://github.com/alvelive/publish/compare/v1.0.0...v1.1.0) (2024-05-24)
 
 
