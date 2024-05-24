@@ -32,7 +32,7 @@ jobs:
 
       - name: Pull latest changes
         run: |
-          git pull origin ${{ github.head_ref }}
+          git pull --rebase origin ${{ github.head_ref }}
 
       - name: Commit and push action.yml
         run: |
@@ -53,4 +53,5 @@ jobs:
       - name: Test Custom Docker Build and Push
         uses: alvelive/publish@v1
         with:
-          publish: false
+          publish: true
+          npm-token: ${{ secrets.GITHUB_TOKEN }}
