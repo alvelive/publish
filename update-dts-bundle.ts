@@ -44,10 +44,13 @@ interface Output {
 }
 
 async function load<T>(...segments: string[]): Promise<T> {
-  return readFile(resolve(__dirname, ...segments), 'utf8').then(JSON.parse);
+  const file = resolve(__dirname, ...segments);
+  const content = await readFile(file, 'utf8');
+
+  return JSON.parse(content);
 }
 
-async function main() {
+async function main(): Promise<void> {
   const [{ dependencies, devDependencies }, dtsBundleConfig] =
     await Promise.all([
       load<PackageJSON>('./package.json'),
@@ -70,3 +73,5 @@ async function main() {
     JSON.stringify(dtsBundleConfig, null, 2),
   );
 }
+
+void main();
