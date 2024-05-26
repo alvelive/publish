@@ -10,7 +10,7 @@
       "libraries": {
         "allowedTypesLibraries": [],
         "importedLibraries": [],
-        "inlinedLibraries": ["*"]
+        "inlinedLibraries": []
       },
       "noCheck": true,
       "outFile": "./dist/types/index.d.ts",

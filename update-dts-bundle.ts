@@ -1,6 +1,8 @@
 import { readFile, writeFile } from 'fs/promises';
 import { resolve } from 'path';
 
+const logger = console;
+
 interface PackageJSON {
   dependencies?: Dependencies;
   devDependencies?: Dependencies;
@@ -45,25 +47,68 @@ interface Output {
 
 async function load<T>(...segments: string[]): Promise<T> {
   const file = resolve(__dirname, ...segments);
+
+  logger.log(`Loading file: ${file}`);
+
   const content = await readFile(file, 'utf8');
+
+  logger.log(`File loaded: ${file} (${content.length} bytes)`);
 
   return JSON.parse(content);
 }
 
 async function main(): Promise<void> {
-  const [{ dependencies, devDependencies }, dtsBundleConfig] =
-    await Promise.all([
-      load<PackageJSON>('./package.json'),
-      load<DTSBundleGeneratorConfig>('dts-bundle.config.json'),
-    ]);
+  const [packageJSON, dtsBundleConfig] = await Promise.all([
+    load<PackageJSON>('./package.json'),
+    load<DTSBundleGeneratorConfig>('dts-bundle.config.json'),
+  ]);
+
+  if (!dtsBundleConfig.entries) {
+    logger.warn('No entries found in dts-bundle.config.json');
+
+    return;
+  }
+
+  const dependencies = Object.keys(packageJSON.dependencies ?? {});
+  const devDependencies = Object.keys(packageJSON.devDependencies ?? {});
+  const hasDependency = !!(dependencies.length || devDependencies.length);
+
+  if (!hasDependency) {
+    logger.warn('No dependency found in package.json');
+
+    return;
+  }
+
+  if (dependencies.length) {
+    logger.log(`${dependencies.length} dependencies found`);
+  }
+
+  if (devDependencies.length) {
+    logger.log(`${devDependencies.length} devDependencies found`);
+  }
+
+  logger.log('Updating inlinedLibraries with dependencies...');
 
   dtsBundleConfig.entries ??= [];
   dtsBundleConfig.entries = dtsBundleConfig.entries.map((entry) => {
     entry.libraries ??= {};
     entry.libraries.inlinedLibraries ??= [];
-    entry.libraries.inlinedLibraries = entry.libraries.inlinedLibraries
-      .concat(Object.keys(dependencies ?? {}))
-      .concat(Object.keys(devDependencies ?? {}));
+
+    /**
+     * Add dependencies to inlinedLibraries
+     */
+    entry.libraries.inlinedLibraries = [
+      ...entry.libraries.inlinedLibraries,
+      ...dependencies,
+      ...devDependencies,
+    ];
+
+    /**
+     * Remove duplicates
+     */
+    entry.libraries.inlinedLibraries = entry.libraries.inlinedLibraries.filter(
+      (value, index, array) => array.indexOf(value) === index,
+    );
 
     return entry;
   });
