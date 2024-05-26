@@ -20,8 +20,9 @@
     "node_modules"
   ],
   "include": [
-    "src/**/*.ts",
     ".eslintrc.js",
-    ".eslintrc/**/*"
+    ".eslintrc/**/*",
+    "src/**/*.ts",
+    "update-dts-bundle.ts"
   ]
 }
