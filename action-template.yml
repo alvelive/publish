@@ -42,13 +42,13 @@ runs:
     - name: Check input values
       env:
         # Required for building
-        ENTRY_POINT: "${{ inputs.entrypoint }}"
-        PLATFORM: "${{ inputs.platform }}"
+        ENTRY_POINT: '${{ inputs.entrypoint }}'
+        PLATFORM: '${{ inputs.platform }}'
 
         # Required for publishing
-        NPM_TOKEN: "${{ inputs.npm-token }}"
-        PUBLISH: "${{ inputs.publish }}"
-        REGISTRY_URL: "${{ inputs.registry-url }}"
+        NPM_TOKEN: '${{ inputs.npm-token }}'
+        PUBLISH: '${{ inputs.publish }}'
+        REGISTRY_URL: '${{ inputs.registry-url }}'
       shell: bash
       run: |
         #!/bin/bash
@@ -58,7 +58,7 @@ runs:
         err() { printf "%s\n" "$*" >&2; }
 
         should_exit=0
-        
+
         if [ -z "$ENTRY_POINT" ]; then
           err "Error: Entry point is required for building"
           should_exit=1
@@ -107,7 +107,14 @@ runs:
 
     - name: Download build scripts
       shell: bash
-      run: wget {{base_url}}/Makefile {{base_url}}/dts-bundle.config.json
+      run: |
+        if [ ! -f Makefile ]; then
+          wget {{base_url}}/Makefile
+        fi
+
+        if [ ! -f dts-bundle.config.json ]; then
+          wget {{base_url}}/dts-bundle.config.json
+        fi
 
     - name: Run build script
       shell: bash
