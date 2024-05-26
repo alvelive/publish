@@ -6,9 +6,7 @@ interface PackageJSON {
   devDependencies?: Dependencies;
 }
 
-interface Dependencies {
-  [Dep: string]: string;
-}
+type Dependencies = Record<string, string>;
 
 interface DTSBundleGeneratorConfig {
   compilationOptions?: CompilationOptions;
