@@ -1,7 +1,7 @@
 /* eslint-disable no-process-env */
 const logger = console;
 
-export function check(
+function check(
   stage: string,
   dict: Record<string, unknown>,
 ): dict is Record<string, string> {
