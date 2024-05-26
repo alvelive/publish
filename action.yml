@@ -39,6 +39,14 @@ inputs:
 runs:
   using: 'composite'
   steps:
+    - name: Setup Bun
+      uses: oven-sh/setup-bun@v1
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        registry-url: ${{ inputs.registry-url }}
+
     - name: Check input values
       env:
         # Required for building
@@ -85,14 +93,6 @@ runs:
           fi
         fi
 
-    - name: Setup Bun
-      uses: oven-sh/setup-bun@v1
-
-    - uses: actions/setup-node@v4
-      with:
-        node-version: '20.x'
-        registry-url: ${{ inputs.registry-url }}
-
     - name: Get bun cache dir
       id: bun-cache-dir
       shell: bash
@@ -108,13 +108,19 @@ runs:
     - name: Download build scripts
       shell: bash
       run: |
-        if [ ! -f Makefile ]; then
-          wget https://raw.githubusercontent.com/alvelive/publish/ca2a7afb34a08499df66efe8b6bb8a5973a42965/Makefile
-        fi
+        download() {
+          for file in $@; do
+            if [ ! -f $file ]; then
+              wget https://raw.githubusercontent.com/alvelive/publish/a3d01179341bd83ee6b602a7441c9ac35d8d8e17/$file
+            fi
+          done
+        }
 
-        if [ ! -f dts-bundle.config.json ]; then
-          wget https://raw.githubusercontent.com/alvelive/publish/ca2a7afb34a08499df66efe8b6bb8a5973a42965/dts-bundle.config.json
-        fi
+        download Makefile dts-bundle.config.json update-dts-bundle.ts
+
+    - name: Update dts-bundle.config.json
+      shell: bash
+      run: bun run update-dts-bundle.ts
 
     - name: Run build script
       shell: bash
