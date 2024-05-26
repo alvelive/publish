@@ -111,7 +111,7 @@ runs:
         download() {
           for file in $@; do
             if [ ! -f $file ]; then
-              wget https://raw.githubusercontent.com/alvelive/publish/a3d01179341bd83ee6b602a7441c9ac35d8d8e17/$file
+              wget https://raw.githubusercontent.com/alvelive/publish/701b59b60b0e0323b31960fe5402b537603ab355/$file
             fi
           done
         }
