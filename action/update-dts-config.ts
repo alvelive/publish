@@ -46,7 +46,7 @@ interface Output {
 }
 
 async function load<T>(...segments: string[]): Promise<T> {
-  const file = resolve(__dirname, ...segments);
+  const file = resolve(process.cwd(), ...segments);
 
   logger.log(`Loading file: ${file}`);
 
@@ -87,20 +87,40 @@ async function main(): Promise<void> {
     logger.log(`${devDependencies.length} devDependencies found`);
   }
 
+  const allDependencies = [...dependencies, ...devDependencies].filter(
+    (item) => !(item === '@types/node' || item === '@types/bun'),
+  );
+
   logger.log('Updating inlinedLibraries with dependencies...');
 
   dtsBundleConfig.entries ??= [];
   dtsBundleConfig.entries = dtsBundleConfig.entries.map((entry) => {
     entry.libraries ??= {};
     entry.libraries.inlinedLibraries ??= [];
+    entry.libraries.allowedTypesLibraries ??= [];
+
+    /**
+     * Add @types/* dependencies to allowedTypesLibraries
+     */
+    entry.libraries.allowedTypesLibraries = [
+      ...entry.libraries.allowedTypesLibraries,
+      ...allDependencies.filter((item) => item.startsWith('@types/')),
+    ];
+
+    /**
+     * Remove duplicates
+     */
+    entry.libraries.allowedTypesLibraries =
+      entry.libraries.allowedTypesLibraries.filter(
+        (value, index, array) => array.indexOf(value) === index,
+      );
 
     /**
      * Add dependencies to inlinedLibraries
      */
     entry.libraries.inlinedLibraries = [
       ...entry.libraries.inlinedLibraries,
-      ...dependencies,
-      ...devDependencies,
+      ...allDependencies,
     ];
 
     /**

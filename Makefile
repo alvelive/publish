@@ -1,22 +1,25 @@
-ifndef ENTRY_POINT
-$(error ENTRY_POINT is undefined)
-endif
+PLATFORM ?= node
+ENTRY_POINT ?= src/index.ts
 
-ifndef PLATFORM
-$(error PLATFORM is undefined)
-endif
-
-all: clean build-source-cjs build-source-esm build-typings
+all: | clean install build
 
 clean:
 	rm -rf ./dist
+
+install:
 	bun install --frozen-lockfile
 
-build-source-cjs:
+build:
+	$(MAKE) -j build-cjs build-esm build-typings
+
+build-cjs:
 	bunx --bun esbuild --bundle $(ENTRY_POINT) --platform=$(PLATFORM) --format=cjs --outdir=./dist/cjs --sourcemap=external
 
-build-source-esm:
+build-esm:
 	bunx --bun esbuild --bundle $(ENTRY_POINT) --platform=$(PLATFORM) --format=esm --outdir=./dist/esm --sourcemap=external
 
-build-typings:
+update-dts-config:
+	bun run action/update-dts-config.ts
+
+build-typings: update-dts-config
 	bunx --bun dts-bundle-generator --config dts-bundle.config.json

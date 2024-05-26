@@ -1,28 +1,18 @@
 {
   "compilerOptions": {
     "allowJs": true,
-    "declaration": true,
     "esModuleInterop": true,
     "incremental": true,
     "isolatedModules": true,
-    "lib": [
-      "esnext"
-    ],
+    "lib": ["esnext"],
     "module": "esnext",
-    "moduleResolution": "bundler",
-    "noEmit": true,
+    "moduleResolution": "node",
     "outDir": "./dist",
     "resolveJsonModule": true,
+    "skipDefaultLibCheck": true,
     "skipLibCheck": true,
     "strict": true
   },
-  "exclude": [
-    "node_modules"
-  ],
-  "include": [
-    ".eslintrc.js",
-    ".eslintrc/**/*",
-    "src/**/*.ts",
-    "update-dts-bundle.ts"
-  ]
+  "exclude": ["node_modules", "dist"],
+  "include": ["src/**/*", "action/**/*", ".eslintrc.js", ".eslintrc/**/*"]
 }

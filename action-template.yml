@@ -47,57 +47,10 @@ runs:
         node-version: '20.x'
         registry-url: ${{ inputs.registry-url }}
 
-    - name: Check input values
-      env:
-        # Required for building
-        ENTRY_POINT: '${{ inputs.entrypoint }}'
-        PLATFORM: '${{ inputs.platform }}'
-
-        # Required for publishing
-        NPM_TOKEN: '${{ inputs.npm-token }}'
-        PUBLISH: '${{ inputs.publish }}'
-        REGISTRY_URL: '${{ inputs.registry-url }}'
-      shell: bash
-      run: |
-        #!/bin/bash
-
-        set -e
-
-        err() { printf "%s\n" "$*" >&2; }
-
-        should_exit=0
-
-        if [ -z "$ENTRY_POINT" ]; then
-          err "Error: Entry point is required for building"
-          should_exit=1
-        fi
-
-        if [ -z "$PLATFORM" ]; then
-          err "Error: Platform is required for building"
-          should_exit=1
-        fi
-
-        if [ "$PUBLISH" == "true" ]; then
-          if [ -z "$NPM_TOKEN" ]; then
-            err "Error: NPM token is required for publishing"
-            should_exit=1
-          fi
-
-          if [ -z "$REGISTRY_URL" ]; then
-            err "Error: Registry URL is required for publishing"
-            should_exit=1
-          fi
-
-          if [ $should_exit -eq 1 ]; then
-            exit 1
-          fi
-        fi
-
     - name: Get bun cache dir
       id: bun-cache-dir
       shell: bash
-      run: |
-        echo "bun-cache-dir=$(bun pm cache)" >> $GITHUB_ENV
+      run: echo "bun-cache-dir=$(bun pm cache)" >> $GITHUB_ENV
 
     - name: Cache bun build tools
       uses: actions/cache@v3
@@ -105,70 +58,46 @@ runs:
         path: ${{ env.bun-cache-dir }}
         key: ${{ runner.os }}-bun-cache
 
-    - name: Download build scripts
+    - name: Install build scripts
       shell: bash
       run: |
         download() {
           for file in $@; do
             if [ ! -f $file ]; then
-              wget {{base_url}}/$file
+              output="$(pwd)/$file"
+              dirname="$(dirname $output)"
+              mkdir -p "$dirname"
+              wget "{{base_url}}/$file" -O "$output"
             fi
           done
         }
 
-        download Makefile dts-bundle.config.json update-dts-bundle.ts
+        download Makefile dts-bundle.config.json action/check-env.ts action/npmrc.ts action/update-dts-config.ts
 
-    - name: Update dts-bundle.config.json
-      shell: bash
-      run: bun run update-dts-bundle.ts
-
-    - name: Run build script
+    - name: Check input variables
       shell: bash
       env:
+        PUBLISH: ${{ inputs.publish }}
         ENTRY_POINT: ${{ inputs.entrypoint }}
-        INSTALL_REGISTRY_URL: '${{ inputs.install-registry-url || inputs.registry-url }}'
+        PLATFORM: ${{ inputs.platform }}
+        NPM_TOKEN: ${{ inputs.npm-token }}
+        REGISTRY_URL: ${{ inputs.registry-url }}
+      run: bun run action/check-env.ts
+
+    - name: Create .npmrc file
+      shell: bash
+      env:
         INSTALL_SCOPE: '${{ inputs.install-scope }}'
         INSTALL_TOKEN: '${{ inputs.install-token || inputs.npm-token }}'
+        INSTALL_REGISTRY_URL: '${{ inputs.install-registry-url || inputs.registry-url }}'
+      run: bun run action/npmrc.ts
+
+    - name: Build source
+      shell: bash
+      env:
         PLATFORM: ${{ inputs.platform }}
-      run: |
-        if [ -n "$INSTALL_SCOPE" ]; then
-          echo "Creating bunfig.toml for private scope $INSTALL_SCOPE"
-
-          should_exit=0
-
-          if [ -z "$INSTALL_TOKEN" ]; then
-            echo "Error: No token provided for private scope $INSTALL_SCOPE"
-            should_exit=1
-          fi
-
-          if [ -z "$INSTALL_REGISTRY_URL" ]; then
-            echo "Error: No registry URL provided for private scope $INSTALL_SCOPE"
-            should_exit=1
-          fi
-
-          if [ $should_exit -eq 1 ]; then
-            exit 1
-          fi
-
-          cat <<EOF >bunfig.toml
-          # bunfig.toml
-          [install.scopes]
-          "$INSTALL_SCOPE" = { token = "$INSTALL_TOKEN", url = "$INSTALL_REGISTRY_URL" }
-        EOF
-
-          echo "Creating .npmrc for private scope $INSTALL_SCOPE"
-          cat <<EOF >.npmrc
-          $INSTALL_SCOPE:registry=$INSTALL_REGISTRY_URL
-          //npm.pkg.github.com/:_authToken=$INSTALL_TOKEN
-        EOF
-        else
-          echo "No private scope provided for installation"
-        fi
-
-        make all
-
-        echo "Cleaning up node auth tokens for bun and npm"
-        rm -f bunfig.toml .npmrc
+        ENTRY_POINT: ${{ inputs.entrypoint }}
+      run: make all
 
     - name: Unpublish the package from registry
       if: "${{ inputs.publish == 'true' && inputs.force == 'true' }}"
