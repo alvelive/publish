@@ -120,7 +120,7 @@ async function main(): Promise<void> {
      */
     entry.libraries.inlinedLibraries = [
       ...entry.libraries.inlinedLibraries,
-      ...allDependencies,
+      ...allDependencies.filter((item) => !item.startsWith('@types/')),
     ];
 
     /**
