@@ -67,12 +67,12 @@ runs:
               output="$(pwd)/$file"
               dirname="$(dirname $output)"
               mkdir -p "$dirname"
-              wget "https://raw.githubusercontent.com/alvelive/publish/07316f1df17a220dbd5c27beaa398b9443bee5f8/$file" -O "$output"
+              wget "https://raw.githubusercontent.com/alvelive/publish/7f3309ec765086448fb5a8e11e417a3b6f717582/$file" -O "$output"
             fi
           done
         }
 
-        download Makefile dts-bundle.config.json action/check-env.ts action/npmrc.ts action/update-dts-config.ts
+        download Makefile dts-bundle.config.json action/check-env.ts action/npmrc.ts action/update-dts-config.ts action/clean-package-json.ts
 
     - name: Check input variables
       shell: bash
@@ -98,6 +98,10 @@ runs:
         PLATFORM: ${{ inputs.platform }}
         ENTRY_POINT: ${{ inputs.entrypoint }}
       run: make all
+
+    - name: Clear dependencies from package.json
+      shell: bash
+      run: bun run action/clean-package-json.ts
 
     - name: Unpublish the package from registry
       if: "${{ inputs.publish == 'true' && inputs.force == 'true' }}"
