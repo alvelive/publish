@@ -13,10 +13,10 @@ build:
 	$(MAKE) -j build-cjs build-esm build-typings
 
 build-cjs:
-	bunx --bun esbuild --bundle $(ENTRY_POINT) --platform=$(PLATFORM) --format=cjs --outdir=./dist/cjs --sourcemap=external
+	bunx --bun esbuild --bundle $(ENTRY_POINT) --platform=$(PLATFORM) --format=cjs --outdir=./dist/cjs --sourcemap=external --external=bun
 
 build-esm:
-	bunx --bun esbuild --bundle $(ENTRY_POINT) --platform=$(PLATFORM) --format=esm --outdir=./dist/esm --sourcemap=external
+	bunx --bun esbuild --bundle $(ENTRY_POINT) --platform=$(PLATFORM) --format=esm --outdir=./dist/esm --sourcemap=external --external=bun
 
 update-dts-config:
 	bun run action/update-dts-config.ts
