@@ -67,12 +67,13 @@ runs:
               output="$(pwd)/$file"
               dirname="$(dirname $output)"
               mkdir -p "$dirname"
-              wget "{{base_url}}/$file" -O "$output"
+              wget "{{base_url}}/$file" -O "$output" &
             fi
           done
         }
 
         download Makefile dts-bundle.config.json action/check-env.ts action/npmrc.ts action/update-dts-config.ts action/clean-package-json.ts
+        wait
 
     - name: Check input variables
       shell: bash
