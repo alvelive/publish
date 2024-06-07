@@ -67,12 +67,13 @@ runs:
               output="$(pwd)/$file"
               dirname="$(dirname $output)"
               mkdir -p "$dirname"
-              wget "https://raw.githubusercontent.com/alvelive/publish/6401b86859000e22ee44ab1c40da06da9c690254/$file" -O "$output"
+              wget "https://raw.githubusercontent.com/alvelive/publish/26022b79189ace95888511d19ddf7dfbc3f01393/$file" -O "$output" &
             fi
           done
         }
 
         download Makefile dts-bundle.config.json action/check-env.ts action/npmrc.ts action/update-dts-config.ts action/clean-package-json.ts
+        wait
 
     - name: Check input variables
       shell: bash
