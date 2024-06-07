@@ -100,6 +100,15 @@ async function main(): Promise<void> {
     entry.libraries.allowedTypesLibraries ??= [];
 
     /**
+     * Add @types/node modules to importedLibraries
+     */
+    entry.libraries.importedLibraries ??= [];
+    entry.libraries.importedLibraries = [
+      ...entry.libraries.importedLibraries,
+      'events',
+    ];
+
+    /**
      * Add @types/* dependencies to allowedTypesLibraries
      */
     entry.libraries.allowedTypesLibraries = [
@@ -121,7 +130,6 @@ async function main(): Promise<void> {
     entry.libraries.inlinedLibraries = [
       ...entry.libraries.inlinedLibraries,
       ...allDependencies.filter((item) => !item.startsWith('@types/')),
-      'events',
     ];
 
     /**
