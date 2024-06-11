@@ -45,6 +45,31 @@ interface Output {
   exportReferencedTypes?: boolean;
 }
 
+function uniq(): (value: string, index: number, array: string[]) => boolean {
+  return function <T, U extends T[]>(
+    value: T,
+    index: keyof U,
+    array: U,
+  ): boolean {
+    return array.indexOf(value) === index;
+  };
+}
+
+function replace(
+  needle: string | RegExp,
+  replacement: string,
+): (haystack: string) => string {
+  return function <T extends string>(haystack: T): string {
+    return haystack.replace(needle, replacement);
+  };
+}
+
+function startsWith(needle: string): (haystack: string) => boolean {
+  return function <T extends string>(haystack: T): boolean {
+    return haystack.startsWith(needle);
+  };
+}
+
 async function load<T>(...segments: string[]): Promise<T> {
   const file = resolve(process.cwd(), ...segments);
 
@@ -106,23 +131,21 @@ async function main(): Promise<void> {
     entry.libraries.importedLibraries = [
       ...entry.libraries.importedLibraries,
       'events',
-    ];
+    ].filter(uniq());
 
     /**
      * Add @types/* dependencies to allowedTypesLibraries
      */
     entry.libraries.allowedTypesLibraries = [
       ...entry.libraries.allowedTypesLibraries,
-      ...allDependencies.filter((item) => item.startsWith('@types/')),
-    ];
+      ...allDependencies,
+    ].filter(uniq());
 
     /**
      * Remove duplicates
      */
     entry.libraries.allowedTypesLibraries =
-      entry.libraries.allowedTypesLibraries.filter(
-        (value, index, array) => array.indexOf(value) === index,
-      );
+      entry.libraries.allowedTypesLibraries.filter(uniq());
 
     /**
      * Add dependencies to inlinedLibraries
@@ -130,16 +153,15 @@ async function main(): Promise<void> {
     entry.libraries.inlinedLibraries = [
       ...entry.libraries.inlinedLibraries,
       ...allDependencies
-        .filter((item) => item.startsWith('@types/'))
-        .map((item) => item.replace('@types/', '')),
-    ];
+        .filter(startsWith('@types/'))
+        .map(replace('@types/', '')),
+    ].filter(uniq());
 
     /**
      * Remove duplicates
      */
-    entry.libraries.inlinedLibraries = entry.libraries.inlinedLibraries.filter(
-      (value, index, array) => array.indexOf(value) === index,
-    );
+    entry.libraries.inlinedLibraries =
+      entry.libraries.inlinedLibraries.filter(uniq());
 
     return entry;
   });
