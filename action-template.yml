@@ -101,6 +101,7 @@ runs:
     - name: Build source
       shell: bash
       env:
+        BUILD_ARGS: ${{ inputs.build-args }}
         PLATFORM: ${{ inputs.platform }}
         ENTRY_POINT: ${{ inputs.entrypoint }}
       run: make all
