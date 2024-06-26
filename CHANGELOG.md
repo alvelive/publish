@@ -1,5 +1,40 @@
 # Changelog
 
+## [1.3.0](https://github.com/alvelive/publish/compare/v1.2.1...v1.3.0) (2024-06-26)
+
+
+### Features
+
+* **action-template:** only wget build scripts when there is not an existing one ([ca2a7af](https://github.com/alvelive/publish/commit/ca2a7afb34a08499df66efe8b6bb8a5973a42965))
+* **action:** added build-args ([885fd27](https://github.com/alvelive/publish/commit/885fd279eebcfeaf76e7191fc1abd522a7f8d25b))
+* **build:** auto add every dep into the inlined libraries ([69f59af](https://github.com/alvelive/publish/commit/69f59af01e4a8fba59fe86ecfb111e1f2fff431f))
+* **template:** added clearing package.json dependencies to prevent any issues with pm ([3d2653a](https://github.com/alvelive/publish/commit/3d2653adb8e88f668066c96d7cdfdaf295b4a4b5))
+
+
+### Bug Fixes
+
+* **action-template:** invalid usage of inputs ([3f7d6ab](https://github.com/alvelive/publish/commit/3f7d6ab4277e2764cb0ba8728daefb31004cf159))
+* **action:** build args is not being passed ([49e8927](https://github.com/alvelive/publish/commit/49e8927734ae52791a560cbbf42765b7c2c64df6))
+* **action:** build args is not being passed ([bc76f33](https://github.com/alvelive/publish/commit/bc76f332201db73453b04928ac65a1ec157b3b49))
+* **action:** fix typo ([32228aa](https://github.com/alvelive/publish/commit/32228aab6fc4ff52d0b352fd811dcb2f89852d4e))
+* **action:** invalida rg pass ([2f340bd](https://github.com/alvelive/publish/commit/2f340bda1b23e8550d7c0496111195071d4d4a65))
+* **build:** build action fails to resolve bun ([79d3d62](https://github.com/alvelive/publish/commit/79d3d628f22d4d63907faf787711b29d111e1525))
+* **dts:** added events to allowed types ([03af0fd](https://github.com/alvelive/publish/commit/03af0fdb0196f6c635fa810951c0ff12e9ac808b))
+* **dts:** added events to allowed types ([43c2ede](https://github.com/alvelive/publish/commit/43c2ede79ad761671832e1d365a6cf15ace4a031))
+* **dts:** dts does not include libs without @types/* ([1e92c5a](https://github.com/alvelive/publish/commit/1e92c5a06426803c20f8e6cc598768e36f6acff6))
+* **dts:** update-dts-config ([4a7c3df](https://github.com/alvelive/publish/commit/4a7c3df559ce2df0901b14f2dbbdba8fe0eb3a4b))
+* **dts:** updated dts config ([885fd27](https://github.com/alvelive/publish/commit/885fd279eebcfeaf76e7191fc1abd522a7f8d25b))
+* **esbuild:** Fix typo in Makefile for external bundler ([195f214](https://github.com/alvelive/publish/commit/195f214798bd0bd4d879afc77292d6ef5bc9adac))
+* **Makefile:** removed --bun ([7ca4914](https://github.com/alvelive/publish/commit/7ca4914350e0314161a31378caf4d7ce81136716))
+* **npmrc:** invalid check usage ([62e0cd4](https://github.com/alvelive/publish/commit/62e0cd42739d6573d4abe4df06fc85b3ee575bfc))
+* **pkg:** added esbuild ([c92978b](https://github.com/alvelive/publish/commit/c92978b06c0ec09785825b2c9f066c3ef257f43b))
+* **pm:** updated lockfile ([0ab5df3](https://github.com/alvelive/publish/commit/0ab5df3864bae60011c380705a52b1b7b7d036a8))
+* **tpl:** download scripts in parallel ([26022b7](https://github.com/alvelive/publish/commit/26022b79189ace95888511d19ddf7dfbc3f01393))
+* **types:** added types to inlinedLibraries ([4fd2a37](https://github.com/alvelive/publish/commit/4fd2a37b2c62770f931c287fdff187ada50d7d09))
+* **update-dts-bundle.ts:** fix eslint issue with typing ([fd49acf](https://github.com/alvelive/publish/commit/fd49acf5a7fa1e098863b19bb52574ef291c31a1))
+* **update-dts-bundle.ts:** main is not calld ([da1c0bb](https://github.com/alvelive/publish/commit/da1c0bb2478aed31877f6c05140a44c030d52867))
+* **update-dts-config:** remove @types/ from inlineLibraries ([cc84a45](https://github.com/alvelive/publish/commit/cc84a45fd6fea5f6d22d998aac59c46f705cb9d0))
+
 ## [1.2.1](https://github.com/alvelive/publish/compare/v1.2.0...v1.2.1) (2024-05-24)
 
 
