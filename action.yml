@@ -71,7 +71,7 @@ runs:
               output="$(pwd)/$file"
               dirname="$(dirname $output)"
               mkdir -p "$dirname"
-              wget "https://raw.githubusercontent.com/alvelive/publish/3e65b0bedc9271632a395769b7299bd4f5e322d7/$file" -O "$output" &
+              wget "https://raw.githubusercontent.com/alvelive/publish/2f340bda1b23e8550d7c0496111195071d4d4a65/$file" -O "$output" &
             fi
           done
         }
@@ -101,6 +101,7 @@ runs:
     - name: Build source
       shell: bash
       env:
+        BUILD_ARGS: ${{ inputs.build-args }}
         PLATFORM: ${{ inputs.platform }}
         ENTRY_POINT: ${{ inputs.entrypoint }}
       run: make all
