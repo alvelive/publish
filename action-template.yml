@@ -83,6 +83,7 @@ runs:
       shell: bash
       env:
         PUBLISH: ${{ inputs.publish }}
+        BUILD_ARGS: ${{ inputs.build-args }}
         ENTRY_POINT: ${{ inputs.entrypoint }}
         PLATFORM: ${{ inputs.platform }}
         NPM_TOKEN: ${{ inputs.npm-token }}
