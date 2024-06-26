@@ -9,7 +9,7 @@ inputs:
     description: 'Target platform for npm package'
     required: false
     default: 'node'
-  build-agrs:
+  build-args:
     description: 'Additional arguments that will be passed to esbuild command'
     required: false
     default: ''
