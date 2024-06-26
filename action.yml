@@ -67,7 +67,7 @@ runs:
               output="$(pwd)/$file"
               dirname="$(dirname $output)"
               mkdir -p "$dirname"
-              wget "https://raw.githubusercontent.com/alvelive/publish/0e9b67b5936f4824dbfab26fce2bc618edf26950/$file" -O "$output" &
+              wget "https://raw.githubusercontent.com/alvelive/publish/1e92c5a06426803c20f8e6cc598768e36f6acff6/$file" -O "$output" &
             fi
           done
         }
