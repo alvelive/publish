@@ -133,28 +133,28 @@ async function main(): Promise<void> {
       'events',
     ].filter(uniq());
 
+    const appendLibraries = allDependencies
+      .concat(
+        allDependencies
+          .filter(startsWith('@types/'))
+          .map(replace('@types/', '')),
+      )
+      .filter(uniq());
+
     /**
      * Add @types/* dependencies to allowedTypesLibraries
      */
     entry.libraries.allowedTypesLibraries = [
       ...entry.libraries.allowedTypesLibraries,
-      ...allDependencies,
+      ...appendLibraries,
     ].filter(uniq());
-
-    /**
-     * Remove duplicates
-     */
-    entry.libraries.allowedTypesLibraries =
-      entry.libraries.allowedTypesLibraries.filter(uniq());
 
     /**
      * Add dependencies to inlinedLibraries
      */
     entry.libraries.inlinedLibraries = [
       ...entry.libraries.inlinedLibraries,
-      ...allDependencies
-        .filter(startsWith('@types/'))
-        .map(replace('@types/', '')),
+      ...appendLibraries,
     ].filter(uniq());
 
     /**
