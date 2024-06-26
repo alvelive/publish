@@ -9,7 +9,7 @@ inputs:
     description: 'Target platform for npm package'
     required: false
     default: 'node'
-  build-agrs:
+  build-args:
     description: 'Additional arguments that will be passed to esbuild command'
     required: false
     default: ''
@@ -71,7 +71,7 @@ runs:
               output="$(pwd)/$file"
               dirname="$(dirname $output)"
               mkdir -p "$dirname"
-              wget "https://raw.githubusercontent.com/alvelive/publish/49e8927734ae52791a560cbbf42765b7c2c64df6/$file" -O "$output" &
+              wget "https://raw.githubusercontent.com/alvelive/publish/3e65b0bedc9271632a395769b7299bd4f5e322d7/$file" -O "$output" &
             fi
           done
         }
